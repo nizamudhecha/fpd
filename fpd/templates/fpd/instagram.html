@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake Profile Detector</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body class="main-container">
+
+  <!-- Main Container -->
+  <div class="content-wrapper">
+
+    <!-- Form Section -->
+    <div class="form-section" id="formSection">
+      <h2 class="form-title">Check Profile</h2>
+      <form class="form" id="profileForm" action="{% url 'instagram' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username" class="form-label">Instagram Username</label>
+          <input id="username" name="username" type="text" placeholder="Enter Instagram Username" class="form-input"
+            required />
+        </div>
+        <button type="submit" class="form-button" id="submitBtn">CHECK INSTAGRAM PROFILE</button>
+
+      </form>
+      {% if msg %}
+      <h2>{{ msg }}</h2>
+      {% if image_data %}
+      <div class="result-graph">
+        <h3>Graphical Representation</h3>
+        <img src="data:image/png;base64,{{ image_data }}" alt="Result Graph">
+      </div>
+      {% endif %}
+      {% endif %}
+    </div>
+
+    <!-- Text Section -->
+    <div class="text-section">
+      <h1 class="main-title">
+        Fake Profile
+        <span class="highlight">Detection System</span>
+      </h1>
+      <p class="description">Predict whether the profile is fake or not</p>
+
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer-text">
+      Our AI-powered Fake Profile Detector identifies and removes fraudulent accounts using advanced analytics and
+      behavioral patterns. Enhance platform security, build trust, and combat spam effortlessly.
+    </p>
+  </footer>
+
+  <!-- External JavaScript -->
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
