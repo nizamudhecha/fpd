@@ -20,7 +20,7 @@ instagram_data_file = 'instagram_data.csv'
 insta_username = 'youdoyou_123456'
 insta_password = 'icandoit'
 session_file = ".instaloader-session-youdoyou_123456"
-
+celebrity_usernames = ['salmankhan', 'shahrukhkhan', 'deepikapadukone']
 # Path to the session file
 session_file = os.path.abspath(session_file)
 
@@ -197,75 +197,80 @@ print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 import pandas as pd
 import numpy as np
-
-def test_instagram_profile(profile_data, username):
+import pandas as pd
+def test_instagram_profile(profile_data, username,profile):
     """Tests the Instagram profile data against predefined criteria and the trained model."""
     
-    # Check if profile_data is a dictionary or numpy array
-    if isinstance(profile_data, dict):
-        # Handle the dictionary case with .get()
-        followers = profile_data.get('#followers', 0)
-        follows = profile_data.get('#follows', 0)
-        posts = profile_data.get('#posts', 0)
-        follower_following_ratio = profile_data.get('follower_following_ratio', 0)
-        blue_tick = profile_data.get('blue_tick', 0)
-    elif isinstance(profile_data, np.ndarray):
-        # Handle the numpy array case by using indices (assuming specific column order)
-        followers = profile_data[0]
-        follows = profile_data[1]
-        posts = profile_data[2]
-        follower_following_ratio = profile_data[3]
-        blue_tick = profile_data[4]
-    else:
-        return "Error: Invalid profile data format"
+    # Convert ndarray to dictionary if necessary (already done earlier)
+    if isinstance(profile_data, np.ndarray):
+        profile_data = dict(zip(X.columns, profile_data.flatten()))
 
+    print("Available keys in profile data:", profile_data.keys())
+
+    blue_tick = 1 if profile.is_verified else 0
     # Special check for verified profiles
+    followers = profile_data.get('#followers', 0)
+    follows = profile_data.get('#follows', 0)
+  
+
+    print(f"Followers: {followers}, Follows: {follows}, Blue Tick: {blue_tick}")
+
     if followers > 1000 and follows < 10 and blue_tick == 1:
         return "Real Profile (Blue Tick, High Followers, Low Following)"
-    
-    if followers < 250 and posts < 100:
+    # Check for fake user profiles with low activity
+    if profile_data.get('#followers', 0) < 250 and profile_data.get('#posts', 0) < 100:
         return "Fake User Profile (Low Activity)"
     
-    # Check for normal user behavior
-    if followers < 500 and posts < 10:
+    # Check for normal user profiles with low activity
+    if profile_data.get('#followers', 0) < 500 and profile_data.get('#posts', 0) < 10:
         return "Normal User Profile (Low Activity)"
+    print(profile_data.get('follower_following_ratio', 0))
     
     # Check for profiles with reasonable follower-following ratios
-    if follower_following_ratio < 3 and posts > 5:
+    if profile_data.get('follower_following_ratio', 0) < 3 and profile_data.get('#posts', 0) > 5:
         return "Normal User Profile (Balanced Following and Posts)"
     
+    # Check for potential fan pages
+    if any(celeb in username.lower() for celeb in celebrity_usernames):
+        if "fanpage" in profile_data.get('biography', '').lower():
+            return "Potential Fan Page (Fanpage Mentioned in Bio)"
+        elif "fanpage" in profile_data.get('full_name', '').lower():
+            return "Potential Fan Page (Fanpage Mentioned in Full Name)"
+        elif profile_data.get('#followers', 0) < 100:
+            return "Potential Fan Page (Low Activity)"
+        elif profile_data.get('#followers', 0) >= 100 and profile_data.get('#followers', 0) < 1000:
+            return "Potential Fan Page (Moderate Followers)"
+        elif profile_data.get('#followers', 0) >= 1000:
+            return "Potential Fan Page (High Followers)"
+    
     # Convert profile data to DataFrame
-    try:
-        profile_df = pd.DataFrame([profile_data]) if isinstance(profile_data, dict) else pd.DataFrame([profile_data.tolist()])
-    except Exception as e:
-        print(f"Error in DataFrame conversion: {e}")
-        return "Error in profile data"
+    profile_df = pd.DataFrame([profile_data])
     
-    print("Profile DataFrame shape:", profile_df.shape)
-    print("Profile DataFrame columns:", profile_df.columns)
+    # Ensure all required features are present
+    required_features = X.columns.tolist()  # X is the training dataset used to fit the model
+    profile_df = profile_df.reindex(columns=required_features, fill_value=0)  # Fix column reordering issue
     
-    # Ensure all required features are present in the profile data
-    required_features = ['#followers', '#follows', '#posts', 'follower_following_ratio', 'blue_tick']
-    missing_features = [feature for feature in required_features if feature not in profile_df.columns]
+    # Predict using the trained model
+    prediction = model.predict(profile_df)
     
-    if missing_features:
-        print(f"Missing features: {missing_features}")
-        for feature in missing_features:
-            profile_df[feature] = 0  # Fill missing features with default values
-    
-    # Check the data type of the profile DataFrame
-    print("Profile DataFrame types:", profile_df.dtypes)
+    # Output the result with detailed reasons if the profile is predicted as fake
+    if prediction[0] == 1:  # Fake Profile
+        reasons = []
+        if profile_data.get('blue_tick', 0) == 0:
+            reasons.append("Profile is not verified (no blue tick).")
+        if profile_data.get('#followers', 0) < 100:
+            reasons.append("Low follower count.")
+        if profile_data.get('#posts', 0) < 5:
+            reasons.append("Low posting activity.")
+        if profile_data.get('follower_following_ratio', 0) > 100:  # Adjust threshold as needed
+            reasons.append("Suspicious follower-following ratio.")
+        if any(celeb in username.lower() for celeb in celebrity_usernames):
+            reasons.append("Username resembles a celebrity, which may indicate impersonation.")
+        
+        return f"Fake Profile. Reasons: {', '.join(reasons)}"
+    else:
+        return "Real Profile"
 
-    # Make prediction using the trained model
-    try:
-        result = model.predict(profile_df)
-        if result[0] == 1:
-            return "The Profile is Real"
-        else:
-            return "The Profile is Fake"
-    except Exception as e:
-        print(f"Error in prediction: {e}")
-        return "Error during profile prediction"
 
 
 
@@ -298,12 +303,12 @@ def instagram(request):
                     profile_data = preprocess_data(profile)
 
                     # Test the Instagram profile
-                    result = test_instagram_profile(profile_data, input_username)
+                    result = test_instagram_profile(profile_data, input_username, profile)
 
                     # Save the result to dataset, passing instagram_data_file
                     save_to_dataset(profile, result, instagram_data_file)
 
-                    msg = f"The profile '{input_username}' is classified as: {result}"
+                    msg = f"The profile '{input_username}' is : {result}"
 
                 except Exception as e:
                     msg = f"An error occurred during profile analysis: {str(e)}"

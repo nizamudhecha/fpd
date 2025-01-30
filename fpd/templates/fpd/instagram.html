@@ -6,15 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fake Profile Detector</title>
   {% load static %}
+
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    .modal {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      overflow: auto;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #0a192f;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 
 <body class="main-container">
-
-  <!-- Main Container -->
   <div class="content-wrapper">
-
-    <!-- Form Section -->
     <div class="form-section" id="formSection">
       <h2 class="form-title">Check Profile</h2>
       <form class="form" id="profileForm" action="{% url 'instagram' %}" method="POST">
@@ -25,32 +57,17 @@
             required />
         </div>
         <button type="submit" class="form-button" id="submitBtn">CHECK INSTAGRAM PROFILE</button>
-
       </form>
-      {% if msg %}
-      <h2>{{ msg }}</h2>
-      {% if image_data %}
-      <div class="result-graph">
-        <h3>Graphical Representation</h3>
-        <img src="data:image/png;base64,{{ image_data }}" alt="Result Graph">
-      </div>
-      {% endif %}
-      {% endif %}
     </div>
 
-    <!-- Text Section -->
     <div class="text-section">
       <h1 class="main-title">
-        Fake Profile
-        <span class="highlight">Detection System</span>
+        Fake Profile <span class="highlight">Detection System</span>
       </h1>
       <p class="description">Predict whether the profile is fake or not</p>
-
-
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <p class="footer-text">
       Our AI-powered Fake Profile Detector identifies and removes fraudulent accounts using advanced analytics and
@@ -58,8 +75,37 @@
     </p>
   </footer>
 
-  <!-- External JavaScript -->
+  {% if msg %}
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick=closeModal()>&times;</span>
+      <h2>{{msg}}</h2>
+
+    </div>
+  </div>
+  {% endif %}
+
+
+
   <script src="{% static 'js/main.js' %}"></script>
+
+  <script>
+    function openModal() {
+      document.getElementById("profileModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      console.log("close");
+      document.getElementById("profileModal").classList.add("hidden");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var modal = document.getElementById("profileModal");
+      if (modal) {
+        modal.classList.remove("hidden");
+      }
+    });
+  </script>
 </body>
 
 </html>
