@@ -4,13 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <title>Fake Profile Detector</title>
   {% load static %}
 
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <style>
     .modal {
-      display: block;
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -27,8 +28,8 @@
       padding: 20px;
       border-radius: 5px;
       width: 80%;
-      max-width: 400px;
       text-align: center;
+      color: #fff;
     }
 
     .close-btn {
@@ -42,11 +43,64 @@
     .hidden {
       display: none;
     }
+
+    /* Loading Screen */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: white;
+      z-index: 1000;
+    }
+
+    /* Loading Animation */
+    .loading-circle {
+      width: 50px;
+      height: 50px;
+      border: 5px solid transparent;
+      border-top: 5px solid cyan;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-text {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .loading-message {
+      font-size: 16px;
+      color: lightgray;
+    }
+
+    .hidden-load {
+      display: none;
+    }
   </style>
 </head>
 
 <body class="main-container">
-  <div class="content-wrapper">
+
+  <!-- Form Section -->
+  <div class="content-wrapper" id="contentWrapper">
     <div class="form-section" id="formSection">
       <h2 class="form-title">Check Profile</h2>
       <form class="form" id="profileForm" action="{% url 'instagram' %}" method="POST">
@@ -68,41 +122,68 @@
     </div>
   </div>
 
-  <footer class="footer">
-    <p class="footer-text">
-      Our AI-powered Fake Profile Detector identifies and removes fraudulent accounts using advanced analytics and
-      behavioral patterns. Enhance platform security, build trust, and combat spam effortlessly.
-    </p>
-  </footer>
+  <!-- Loading Screen -->
+  <div class="loading-screen hidden-load" id="loadingScreen">
+    <div class="loading-circle"></div>
+    <p class="loading-text" id="loadingPercentage">0%</p>
+    <p class="loading-message">Processing...</p>
+  </div>
 
+  <!-- Modal -->
   {% if msg %}
   <div id="profileModal" class="modal">
     <div class="modal-content">
-      <span class="close-btn" onclick=closeModal()>&times;</span>
-      <h2>{{msg}}</h2>
-
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2>{{ msg }}</h2>
     </div>
   </div>
   {% endif %}
 
-
+  <footer class="footer">
+    <p class="footer-text">
+      Our AI-powered Fake Profile Detector identifies and removes fraudulent accounts using advanced analytics and
+      behavioral patterns.
+      Enhance platform security, build trust, and combat spam effortlessly.
+    </p>
+  </footer>
 
   <script src="{% static 'js/main.js' %}"></script>
 
   <script>
-    function openModal() {
-      document.getElementById("profileModal").classList.remove("hidden");
-    }
+    document.getElementById("profileForm").addEventListener("submit", function (event) {
+      // Show loading screen as soon as the button is clicked
+      document.getElementById("contentWrapper").classList.add("hidden");
+      document.getElementById("loadingScreen").classList.remove("hidden-load");
+
+      // Set initial loading percentage
+      let loadingPercentage = 0;
+      const loadingText = document.getElementById("loadingPercentage");
+
+      // Update the loading percentage from 0 to 100 over a set time interval
+      const loadingInterval = setInterval(function () {
+        if (loadingPercentage < 100) {
+          loadingPercentage++;
+          loadingText.textContent = loadingPercentage + "%";
+        } else {
+          clearInterval(loadingInterval);
+        }
+      }, 50); // Update every 50 milliseconds
+    });
 
     function closeModal() {
-      console.log("close");
-      document.getElementById("profileModal").classList.add("hidden");
+      document.getElementById("profileModal").style.display = "none";
+
+      // Show form and hide loading screen after modal is closed
+      document.getElementById("contentWrapper").classList.remove("hidden");
+      document.getElementById("loadingScreen").classList.add("hidden-load");
     }
 
     document.addEventListener("DOMContentLoaded", function () {
       var modal = document.getElementById("profileModal");
       if (modal) {
-        modal.classList.remove("hidden");
+        modal.style.display = "block";
+        // Hide loading screen as soon as modal is shown
+        document.getElementById("loadingScreen").classList.add("hidden-load");
       }
     });
   </script>

@@ -206,7 +206,26 @@ def test_instagram_profile(profile_data, username,profile):
         profile_data = dict(zip(X.columns, profile_data.flatten()))
 
     print("Available keys in profile data:", profile_data.keys())
+    
+    bio = profile.biography
+    full_name = profile_data.get('fullname_words', '') or " "
+    uname = profile_data.get('username', '')or " "
+    print("Biography:", bio)
+    print("Full Name:", full_name)
 
+    if "fanpage" in bio.lower():
+        return "Potential Fan Page (Fanpage Mentioned in Bio)"
+    elif "fanpage" in full_name.lower():
+        return "Potential Fan Page (Fanpage Mentioned in Full Name)"
+    elif "fanpage" in uname.lower():
+        return "Potential Fan Page (Fanpage Mentioned in Username)"
+    elif "fan page" in bio.lower():
+        return "Potential Fan Page (Fanpage Mentioned in Bio)"
+    elif "fanboy" in uname.lower():
+        return "Potential Fan Page (Fanboy Mentioned in Username)"
+    
+
+    
     blue_tick = 1 if profile.is_verified else 0
     # Special check for verified profiles
     followers = profile_data.get('#followers', 0)
@@ -214,10 +233,25 @@ def test_instagram_profile(profile_data, username,profile):
   
 
     print(f"Followers: {followers}, Follows: {follows}, Blue Tick: {blue_tick}")
-
-    if followers > 1000 and follows < 10 and blue_tick == 1:
+    if blue_tick == 1:
+    # Case where the profile has a blue tick and a reasonable following-follower ratio
+        if followers > 200 and follows < 500 and (followers / follows) > 0.5:  # Example condition for verified profiles
+            return "Real Profile (Verified, Balanced Following and Posts)"
+    
+    # General check for verified profile (Blue Tick)
+    elif followers > 50000 and follows < 10 and blue_tick == 1:
         return "Real Profile (Blue Tick, High Followers, Low Following)"
-    # Check for fake user profiles with low activity
+    
+    elif followers > 50000 and follows < 200 and profile_data.get('#posts', 0) > 100 and blue_tick == 1:
+        return "Real Profile (Verified, Active)"
+    
+    elif followers < 50000 and blue_tick == 1:
+        return "Real Profile (Verified)"
+    
+    
+     
+   
+     # Check for fake user profiles with low activity
     if profile_data.get('#followers', 0) < 250 and profile_data.get('#posts', 0) < 100:
         return "Fake User Profile (Low Activity)"
     
@@ -228,20 +262,12 @@ def test_instagram_profile(profile_data, username,profile):
     
     # Check for profiles with reasonable follower-following ratios
     if profile_data.get('follower_following_ratio', 0) < 3 and profile_data.get('#posts', 0) > 5:
+        
         return "Normal User Profile (Balanced Following and Posts)"
+  
     
-    # Check for potential fan pages
-    if any(celeb in username.lower() for celeb in celebrity_usernames):
-        if "fanpage" in profile_data.get('biography', '').lower():
-            return "Potential Fan Page (Fanpage Mentioned in Bio)"
-        elif "fanpage" in profile_data.get('full_name', '').lower():
-            return "Potential Fan Page (Fanpage Mentioned in Full Name)"
-        elif profile_data.get('#followers', 0) < 100:
-            return "Potential Fan Page (Low Activity)"
-        elif profile_data.get('#followers', 0) >= 100 and profile_data.get('#followers', 0) < 1000:
-            return "Potential Fan Page (Moderate Followers)"
-        elif profile_data.get('#followers', 0) >= 1000:
-            return "Potential Fan Page (High Followers)"
+
+ 
     
     # Convert profile data to DataFrame
     profile_df = pd.DataFrame([profile_data])
