@@ -5,9 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <title>Fake Profile Detector</title>
+  <title>Fake Profile Detection</title>
   {% load static %}
-
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <style>
     .modal {
@@ -99,9 +98,24 @@
 
 <body class="main-container">
 
+  <nav class="nav" id="nav">
+    <div class="container">
+      <div class="nav-content d-flex justify-content-between align-items-center">
+        <div class="logo">
+          <a href="#" class="navbar-logo">Fake Profile <span class="highlight-logo">Detection</span></a>
+        </div>
+        <div class="nav-links d-flex">
+          <a href="{% url 'insta' %}" class="nav-button">Home</a>
+          <a href="{% url 'about' %}" class="nav-button">About</a>
+          <a href="{% url 'about' %}#contact" class="nav-button">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <!-- Form Section -->
-  <div class="content-wrapper" id="contentWrapper">
-    <div class="form-section" id="formSection">
+  <div class="content-wrapper d-flex flex-column-reverse align-items-center text-center" id="contentWrapper">
+    <div class="form-section w-100" id="formSection">
       <h2 class="form-title">Check Profile</h2>
       <form class="form" id="profileForm" action="{% url 'instagram' %}" method="POST">
         {% csrf_token %}
@@ -114,7 +128,7 @@
       </form>
     </div>
 
-    <div class="text-section">
+    <div class="text-section w-100">
       <h1 class="main-title">
         Fake Profile <span class="highlight">Detection System</span>
       </h1>
@@ -139,7 +153,7 @@
   </div>
   {% endif %}
 
-  <footer class="footer">
+  <footer class="footer text-center" id="footer">
     <p class="footer-text">
       Our AI-powered Fake Profile Detector identifies and removes fraudulent accounts using advanced analytics and
       behavioral patterns.
@@ -149,44 +163,7 @@
 
   <script src="{% static 'js/main.js' %}"></script>
 
-  <script>
-    document.getElementById("profileForm").addEventListener("submit", function (event) {
-      // Show loading screen as soon as the button is clicked
-      document.getElementById("contentWrapper").classList.add("hidden");
-      document.getElementById("loadingScreen").classList.remove("hidden-load");
 
-      // Set initial loading percentage
-      let loadingPercentage = 0;
-      const loadingText = document.getElementById("loadingPercentage");
-
-      // Update the loading percentage from 0 to 100 over a set time interval
-      const loadingInterval = setInterval(function () {
-        if (loadingPercentage < 100) {
-          loadingPercentage++;
-          loadingText.textContent = loadingPercentage + "%";
-        } else {
-          clearInterval(loadingInterval);
-        }
-      }, 50); // Update every 50 milliseconds
-    });
-
-    function closeModal() {
-      document.getElementById("profileModal").style.display = "none";
-
-      // Show form and hide loading screen after modal is closed
-      document.getElementById("contentWrapper").classList.remove("hidden");
-      document.getElementById("loadingScreen").classList.add("hidden-load");
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      var modal = document.getElementById("profileModal");
-      if (modal) {
-        modal.style.display = "block";
-        // Hide loading screen as soon as modal is shown
-        document.getElementById("loadingScreen").classList.add("hidden-load");
-      }
-    });
-  </script>
 </body>
 
 </html>

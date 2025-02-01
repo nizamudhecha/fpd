@@ -10,4 +10,6 @@ urlpatterns = [
     #path("twitter/", views.twitter, name="twitter"),
     path('insta/', views.insta, name='insta'),
     path("instagram/", views.instagram, name="instagram"),
+    path('about/', views.about, name='about'),  # About Page
+    path('contact/', views.contact, name='contact'),  # Contact Page
 ]

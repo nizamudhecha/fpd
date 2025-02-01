@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Profile Detection System</title>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/Aboutus.css' %}">
+
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="shield-icon">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>Fake Profile Detection System</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#home" class="nav-button">Home</a>
+                    <a href="#about" class="nav-button">About</a>
+                    <a href="#team" class="nav-button">Team</a>
+                    <a href="#contact" class="nav-button">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="home-section">
+        <div class="container">
+            <div class="grid">
+                <div class="content">
+                    <h1>Professional <span class="highlight">Protection</span><br>With Reliable Service</h1>
+                    <p>Secure your digital assets with our advanced cybersecurity solutions. We provide comprehensive
+                        protection for businesses of all sizes.</p>
+                    <button class="primary-button">Learn More</button>
+                </div>
+                <div class="image">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-31%20215837-PjVQursZQOdappsQ5vDxKRMXBwAhUE.png"
+                        alt="Security Illustration">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>About <span class="highlight">Us</span></h2>
+            <div class="grid">
+                <div class="about-content">
+                    <p>We are a leading cybersecurity company dedicated to protecting businesses and individuals from
+                        digital threats.</p>
+                    <p>With years of experience and cutting-edge technology, we provide comprehensive security solutions
+                        that keep your data safe.</p>
+                </div>
+                <div class="mission-box">
+                    <h3>Our Mission</h3>
+                    <p>To provide state-of-the-art cybersecurity solutions that protect our clients' digital assets and
+                        ensure their peace of mind in an increasingly connected world.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="team-section">
+        <div class="container">
+            <h2>Our <span class="highlight">Team</span></h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar"></div>
+                    <h3>Team Member 1</h3>
+                    <p>Security Expert</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar"></div>
+                    <h3>Team Member 2</h3>
+                    <p>Security Expert</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar"></div>
+                    <h3>Team Member 3</h3>
+                    <p>Security Expert</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contact <span class="highlight">Us</span></h2>
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea></textarea>
+                    </div>
+                    <button type="submit" class="primary-button full-width">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

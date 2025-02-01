@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+db.sqlite3
+static/
+media/
+.DS_Store  # If you're on macOS
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd

@@ -344,3 +344,9 @@ def instagram(request):
             msg = f"An error occurred: {str(e)}"
         
         return render(request, 'fpd/instagram.html', {'msg': msg})
+    
+def about(request):
+    return render(request, 'fpd/Aboutus.html')
+
+def contact(request):
+    return render(request, 'fpd/contact.html')
