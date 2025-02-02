@@ -62,12 +62,12 @@ SESSION_COOKIE_AGE = 86400  # 1 day
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://fakeprofiledetection.up.railway.app/",  # Change this to your frontend domain
-    "http://127.0.0.1:8000/",  # Allow local development
+     # Allow local development
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://fakeprofiledetection.up.railway.app/",
-    "http://127.0.0.1:8000/",
+    
 ]
 
 ROOT_URLCONF = 'fpd.urls'
