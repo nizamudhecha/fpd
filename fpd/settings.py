@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fpd',
     'corsheaders',
-    "django.contrib.sessions"
+    
 ]
 
 MIDDLEWARE = [
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    "django.contrib.sessions.middleware.SessionMiddleware"
+  
 ]
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Default: store in DB
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session after closing browser
