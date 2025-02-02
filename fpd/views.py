@@ -28,43 +28,40 @@ session_file = os.path.abspath(session_file)
 print(os.path.exists(session_file))  # Should return True if the session file exists
 print(os.getcwd())  # Check current working directory
 
+session_file = ".instaloader-session"
+
 def login_to_instagram():
-    """Logs into Instagram using Instaloader session or manual login."""
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
-    L = Instaloader(user_agent=user_agent)
+    """Logs into Instagram using an Instaloader session or manual login."""
+    L = Instaloader()
 
     try:
-        # Attempt to load session if file exists
+        # Load session if available
         if os.path.exists(session_file):
             L.load_session_from_file(insta_username, filename=session_file)
-            print("Successfully logged in using session.")
+            print("✅ Successfully logged in using session.")
         else:
-            print("Session file not found. Logging in manually.")
-            L.context.login(insta_username, insta_password)
+            print("⚠ Session file not found. Logging in manually.")
+            L.login(insta_username, insta_password)
             L.save_session_to_file(filename=session_file)
-            print("Login successful, session saved.")
-        
+            print("✅ Login successful, session saved.")
+
         return L
 
     except TwoFactorAuthRequiredException:
-        print("Two-factor authentication is required. Please provide the code.")
-        code = input("Enter the 2FA code: ")
+        print("🔐 2FA Required. Enter the authentication code:")
+        code = input("Enter 2FA code: ")
         L.context.two_factor_login(insta_username, code)
         L.save_session_to_file(filename=session_file)
-        print("Login successful with 2FA.")
+        print("✅ Login successful with 2FA.")
         return L
 
+    except LoginRequiredException:
+        print("❌ Instagram requires login. Please check your credentials.")
+        return None
+
     except Exception as e:
-        if 'checkpoint required' in str(e).lower():
-            print("Checkpoint required. Follow the challenge URL in your browser.")
-            print("Please complete the CAPTCHA or security check.")
-            challenge_url = str(e).split("challenge_url='")[1].split("'")[0]
-            print(f"Follow this URL to resolve the checkpoint: {challenge_url}")
-            # You can manually go to this URL in your browser, complete the CAPTCHA, and then retry.
-            return None
-        else:
-            print(f"Error during login: {str(e)}")
-            return None
+        print(f"❌ Login error: {e}")
+        return None
 def Index(request):
     """Renders the index page."""
     return render(request, "fpd/instagram.html")
