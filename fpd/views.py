@@ -27,7 +27,8 @@ session_file = os.path.abspath(session_file)
 # Verifying session file existence
 print(os.path.exists(session_file))  # Should return True if the session file exists
 print(os.getcwd())  # Check current working directory
-def login_to_instagram():
+
+def login_to_instagram(insta_username, insta_password):
     """Logs into Instagram using Instaloader session or manual login."""
     L = Instaloader(user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36')
 
@@ -44,10 +45,6 @@ def login_to_instagram():
         
         return L
 
-    except LoginRequiredException:
-        print("Login failed due to authentication error. Check your username/password.")
-        return None
-
     except TwoFactorAuthRequiredException:
         print("Two-factor authentication is required. Please provide the code.")
         code = input("Enter the 2FA code: ")
@@ -56,6 +53,17 @@ def login_to_instagram():
         print("Login successful with 2FA.")
         return L
 
+    except Exception as e:
+        if 'checkpoint required' in str(e).lower():
+            print("Checkpoint required. Follow the challenge URL in your browser.")
+            print("Please complete the CAPTCHA or security check.")
+            challenge_url = str(e).split("challenge_url='")[1].split("'")[0]
+            print(f"Follow this URL to resolve the checkpoint: {challenge_url}")
+            # You can manually go to this URL in your browser, complete the CAPTCHA, and then retry.
+            return None
+        else:
+            print(f"Error during login: {str(e)}")
+            return None
 def Index(request):
     """Renders the index page."""
     return render(request, "fpd/instagram.html")
