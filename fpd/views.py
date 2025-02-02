@@ -4,7 +4,7 @@ import base64
 from django.shortcuts import render
 import numpy as np
 from keras.models import load_model
-from instaloader import Instaloader, Profile, ProfileNotExistsException
+from instaloader import Instaloader, Profile, ProfileNotExistsException, LoginRequiredException, TwoFactorAuthRequiredException
 import pandas as pd
 import os
 import csv
