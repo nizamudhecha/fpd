@@ -17,33 +17,36 @@ from sklearn.ensemble import RandomForestClassifier
 dataset_file = 'train.csv'
 model_file = 'model.pkl'
 instagram_data_file = 'instagram_data.csv'
-insta_username = 'youdoyou_123456'
-insta_password = 'icandoit'
-session_file = ".instaloader-session-youdoyou_123456"
 celebrity_usernames = ['salmankhan', 'shahrukhkhan', 'deepikapadukone']
-# Path to the session file
-session_file = os.path.abspath(session_file)
 
-# Verifying session file existence
-print(os.path.exists(session_file))  # Should return True if the session file exists
-print(os.getcwd())  # Check current working directory
+# Define username and password securely (use environment variables)
+insta_username = os.getenv("INSTA_USERNAME")  # Set this in your environment
+insta_password = os.getenv("INSTA_PASSWORD")  # Set this in your environment
+
+# Define a persistent session file path
+SESSION_DIR = os.path.join(os.getcwd(), "sessions")  # Stores session files
+os.makedirs(SESSION_DIR, exist_ok=True)  # Ensure directory exists
+
+session_file = os.path.join(SESSION_DIR, f"{insta_username}.session")
 
 def login_to_instagram():
     """Logs into Instagram using Instaloader session or manual login."""
-    L = Instaloader(user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36')
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    L = Instaloader(user_agent=user_agent)
 
     try:
         if os.path.exists(session_file):
             L.load_session_from_file(insta_username, filename=session_file)
-            print("Successfully logged in using session.")
+            print("✅ Successfully logged in using session.")
         else:
-            print("Session file not found. Logging in manually.")
-            L.context.login(insta_username, insta_password)
+            print("⚠️ Session file not found. Logging in manually...")
+            L.context.login(insta_username, insta_password)  # Secure login
             L.save_session_to_file(filename=session_file)
-            print("Login successful, session saved.")
+            print("✅ Login successful, session saved.")
+
         return L
     except Exception as e:
-        print(f"Error during login: {str(e)}")
+        print(f"❌ Error during login: {str(e)}")
         return None
 
 def Index(request):
