@@ -1,0 +1,255 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --primary-color: #06b6d4; /* Cyan */
+  --secondary-color: #04a3c9; /* Darker Cyan */
+  --background-gradient-start: #0a192f; /* Dark Blue */
+  --background-gradient-end: #020c1b; /* Very Dark Blue */
+  --form-bg-color: rgba(0, 0, 0, 0.2); /* Transparent Black */
+  --form-border-color: rgba(0, 255, 255, 0.2); /* Cyan Border */
+  --form-label-color: #e0e0e0; /* Light Gray */
+  --form-input-placeholder: #666; /* Medium Gray */
+  --footer-bg-color: rgba(0, 0, 0, 0.3); /* Transparent Black */
+  --footer-text-color: #cce7f2; /* Light Blue */
+  --text-muted: #b3b3b3; /* Muted Gray */
+  --text-highlight: #06b6d4; /* Cyan for highlights */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  background-color: #001324;
+  color: white;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(0, 19, 36, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 229, 176, 0.2);
+  z-index: 50;
+}
+
+.nav-content {
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.highlight-logo {
+  color: var(--text-highlight);
+  font-size: 1.8rem;
+}
+
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+}
+
+.nav-button {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.nav-button:hover {
+  color: var(--text-highlight);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Sections */
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.home-section {
+  padding-top: 96px;
+}
+
+.about-section {
+  background-color: #001f35;
+}
+
+.contact-section {
+  background-color: #001f35;
+}
+
+/* Grid layouts */
+.grid {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Typography */
+h1 {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 3.75rem;
+  }
+}
+
+h2 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  h2 {
+    font-size: 3rem;
+  }
+}
+
+.highlight {
+  color: var(--text-highlight);
+}
+
+p {
+  color: #94a3b8;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.primary-button {
+  background-color: var(--secondary-color);
+  color: #001324;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.primary-button:hover {
+  background-color: var(--primary-color);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Team section */
+.team-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.team-member {
+  background-color: #001f35;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.member-avatar {
+  width: 6rem;
+  height: 6rem;
+  background-color: rgba(0, 229, 176, 0.2);
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+}
+
+/* Contact form */
+.contact-form {
+  max-width: 28rem;
+  margin: 0 auto;
+  background-color: #002a47;
+  padding: 2rem;
+  border-radius: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #001324;
+  border: 1px solid rgba(0, 229, 176, 0.2);
+  border-radius: 0.375rem;
+  color: white;
+}
+
+.form-group textarea {
+  height: 8rem;
+  resize: vertical;
+}
+
+/* Images */
+.image img {
+  width: 100%;
+  height: auto;
+}
+
+/* Mission box */
+.mission-box {
+  background-color: #002a47;
+  padding: 2rem;
+  border-radius: 0.5rem;
+}
+
+.mission-box h3 {
+  color: var(--text-highlight);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}

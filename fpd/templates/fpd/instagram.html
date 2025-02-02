@@ -1,35 +1,64 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="logo.svg" type="image/svg+xml">
-  <title>Fake Profile Detection</title>
   {% load static %}
+  <link rel="shortcut icon" href="{% static 'img/fpd.png' %}">
+  <title>Fake Profile Detection</title>
+
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <style>
     .modal {
       display: none;
+
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      overflow: auto;
       z-index: 1000;
+
+
     }
 
     .modal-content {
-      background-color: #0a192f;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 5px;
       width: 80%;
-      text-align: center;
-      color: #fff;
+      margin: 10% auto;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
     }
+
+
+    .modal-header {
+      background-color: #0a192f;
+      color: white;
+      padding: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .modal-footer {
+      background-color: #020c1b;
+      ;
+      padding: 10px;
+      text-align: right;
+    }
+
+
+    .msg {
+      text-align: left;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
 
     .close-btn {
       position: absolute;
@@ -93,6 +122,23 @@
     .hidden-load {
       display: none;
     }
+
+    .ok-btn {
+      width: 20%;
+      padding: 12px;
+      background-color: #04a3c9;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .ok-btn:hover {
+      background-color: #06b6d4;
+    }
   </style>
 </head>
 
@@ -147,10 +193,15 @@
   {% if msg %}
   <div id="profileModal" class="modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h2>{{ msg }}</h2>
+      <div class="modal-header">
+        <h2 class="msg">{{ msg }}</h2>
+      </div>
+      <div class="modal-footer">
+        <button class="ok-btn" onclick="closeModal()">Close</button>
+      </div>
     </div>
   </div>
+
   {% endif %}
 
   <footer class="footer text-center" id="footer">
