@@ -61,12 +61,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session after closing browser
 SESSION_COOKIE_AGE = 86400  # 1 day
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://fakeprofiledetection.up.railway.app/",  # Change this to your frontend domain
+    "https://fakeprofiledetection.up.railway.app",  # Change this to your frontend domain
      # Allow local development
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://fakeprofiledetection.up.railway.app/",
+    "https://fakeprofiledetection.up.railway.app",
     
 ]
 
