@@ -28,7 +28,7 @@ session_file = os.path.abspath(session_file)
 print(os.path.exists(session_file))  # Should return True if the session file exists
 print(os.getcwd())  # Check current working directory
 
-def login_to_instagram(insta_username, insta_password):
+def login_to_instagram():
     """Logs into Instagram using Instaloader session or manual login."""
     L = Instaloader(user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36')
 
