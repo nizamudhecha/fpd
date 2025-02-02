@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'fpd',
     'corsheaders'
+    "django.contrib.sessions"
 ]
 
 MIDDLEWARE = [
@@ -53,10 +54,22 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware"
 ]
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Default: store in DB
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session after closing browser
+SESSION_COOKIE_AGE = 86400  # 1 day
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://fakeprofiledetection.up.railway.app/",  # Change this to your frontend domain
+    "http://127.0.0.1:8000/",  # Allow local development
+]
+
 CSRF_TRUSTED_ORIGINS = [
-    'https://fakeprofiledetection.up.railway.app',  # Add the domain you are using
+    "https://fakeprofiledetection.up.railway.app/",
+    "http://127.0.0.1:8000/",
 ]
+
 ROOT_URLCONF = 'fpd.urls'
 
 TEMPLATES = [
@@ -131,3 +144,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOW_CREDENTIALS = True
