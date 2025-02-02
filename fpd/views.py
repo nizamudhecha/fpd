@@ -36,9 +36,9 @@ def load_session_from_browser(L):
     try:
         cookies = {
             "csrftoken": "lvselpr9OT2t6oRELlRhZIZxOc9kjQgm",
-            "sessionid": "31970404886%3A06b9JJZbESNGxj%3A10%3AAYfgbNnzVmxKTVh5W2DzE31UoyvWPl5XpsdZ2JBjVg",
+            "sessionid": "31970404886%3AQwWcWyqmdp1mDI%3A5%3AAYfQAlsYBkopggSC2oSVjjyuDN-QBM2ADsXWacXN7A",
             "ds_user_id": "31970404886",
-            "mid": "Z5WbBAALAAF18NI16_-3eIOAf7Nr",
+            "mid": "DFDF27AA-E40F-43B5-8FB6-7246820E0D21",
             "ig_did": "DFDF27AA-E40F-43B5-8FB6-7246820E0D21"
         }
         L.context._session.cookies.update(cookies)
