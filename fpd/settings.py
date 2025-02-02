@@ -54,7 +54,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://fakeprofiledetection.up.railway.app',  # Add the domain you are using
+]
 ROOT_URLCONF = 'fpd.urls'
 
 TEMPLATES = [
