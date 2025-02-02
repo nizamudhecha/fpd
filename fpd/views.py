@@ -28,22 +28,45 @@ session_file = os.path.abspath(session_file)
 print(os.path.exists(session_file))  # Should return True if the session file exists
 print(os.getcwd())  # Check current working directory
 
-session_file = ".instaloader-session"
+session_file = os.path.abspath(".instaloader-session")
+
+# Load session from browser cookies
+def load_session_from_browser(L):
+    """Loads Instagram session using cookies copied from browser DevTools."""
+    try:
+        cookies = {
+            "csrftoken": "lvselpr9OT2t6oRELlRhZIZxOc9kjQgm",
+            "sessionid": "31970404886%3A06b9JJZbESNGxj%3A10%3AAYfgbNnzVmxKTVh5W2DzE31UoyvWPl5XpsdZ2JBjVg",
+            "ds_user_id": "31970404886",
+            "mid": "Z5WbBAALAAF18NI16_-3eIOAf7Nr",
+            "ig_did": "DFDF27AA-E40F-43B5-8FB6-7246820E0D21"
+        }
+        L.context._session.cookies.update(cookies)
+        print("✅ Successfully loaded session from browser cookies.")
+        return True
+    except Exception as e:
+        print(f"❌ Error loading session from browser cookies: {e}")
+        return False
 
 def login_to_instagram():
-    """Logs into Instagram using an Instaloader session or manual login."""
-    L = Instaloader(user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36')
+    """Logs into Instagram using an Instaloader session or browser cookies."""
+    
+    L = Instaloader()
 
+    # Load session from browser cookies
+    if load_session_from_browser(L):
+        return L
+    
     try:
-        # Load session if available
         if os.path.exists(session_file):
+            print(f"🔄 Loading session from {session_file}...")
             L.load_session_from_file(insta_username, filename=session_file)
             print("✅ Successfully logged in using session.")
         else:
             print("⚠ Session file not found. Logging in manually.")
             L.login(insta_username, insta_password)
             L.save_session_to_file(filename=session_file)
-            print("✅ Login successful, session saved.")
+            print(f"✅ Login successful, session saved to {session_file}.")
 
         return L
 
@@ -56,12 +79,14 @@ def login_to_instagram():
         return L
 
     except LoginRequiredException:
-        print("❌ Instagram requires login. Please check your credentials.")
-        return None
+        print("❌ Instagram requires login. Session may be expired. Deleting old session and retrying...")
+        os.remove(session_file)  # Remove corrupted/expired session
+        return login_to_instagram()  # Retry login
 
     except Exception as e:
         print(f"❌ Login error: {e}")
         return None
+        
 def Index(request):
     """Renders the index page."""
     return render(request, "fpd/instagram.html")
