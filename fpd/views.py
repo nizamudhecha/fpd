@@ -17,37 +17,44 @@ from sklearn.ensemble import RandomForestClassifier
 dataset_file = 'train.csv'
 model_file = 'model.pkl'
 instagram_data_file = 'instagram_data.csv'
+insta_username = 'its.ba7man'
+insta_password = 'Fuck@1912006'
+session_file = ".instaloader-session-youdoyou_123456"
 celebrity_usernames = ['salmankhan', 'shahrukhkhan', 'deepikapadukone']
+# Path to the session file
+session_file = os.path.abspath(session_file)
 
-# Define username and password securely (use environment variables)
-insta_username = os.getenv("INSTA_USERNAME")  # Set this in your environment
-insta_password = os.getenv("INSTA_PASSWORD")  # Set this in your environment
-
-# Define a persistent session file path
-SESSION_DIR = os.path.join(os.getcwd(), "sessions")  # Stores session files
-os.makedirs(SESSION_DIR, exist_ok=True)  # Ensure directory exists
-
-session_file = os.path.join(SESSION_DIR, f"{insta_username}.session")
-
+# Verifying session file existence
+print(os.path.exists(session_file))  # Should return True if the session file exists
+print(os.getcwd())  # Check current working directory
 def login_to_instagram():
     """Logs into Instagram using Instaloader session or manual login."""
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    L = Instaloader(user_agent=user_agent)
+    L = Instaloader(user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36')
 
     try:
+        # Attempt to load session if file exists
         if os.path.exists(session_file):
             L.load_session_from_file(insta_username, filename=session_file)
-            print("✅ Successfully logged in using session.")
+            print("Successfully logged in using session.")
         else:
-            print("⚠️ Session file not found. Logging in manually...")
-            L.context.login(insta_username, insta_password)  # Secure login
+            print("Session file not found. Logging in manually.")
+            L.context.login(insta_username, insta_password)
             L.save_session_to_file(filename=session_file)
-            print("✅ Login successful, session saved.")
-
+            print("Login successful, session saved.")
+        
         return L
-    except Exception as e:
-        print(f"❌ Error during login: {str(e)}")
+
+    except LoginRequiredException:
+        print("Login failed due to authentication error. Check your username/password.")
         return None
+
+    except TwoFactorAuthRequiredException:
+        print("Two-factor authentication is required. Please provide the code.")
+        code = input("Enter the 2FA code: ")
+        L.context.two_factor_login(insta_username, code)
+        L.save_session_to_file(filename=session_file)
+        print("Login successful with 2FA.")
+        return L
 
 def Index(request):
     """Renders the index page."""
