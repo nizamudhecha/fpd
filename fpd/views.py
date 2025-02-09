@@ -253,6 +253,7 @@ def test_instagram_profile(profile_data, username,profile):
     uname = profile_data.get('username', '')or " "
     print("Biography:", bio)
     print("Full Name:", full_name)
+    print("username",username)
 
     if "fanpage" in bio.lower():
         return "Potential Fan Page (Fanpage Mentioned in Bio)"
@@ -274,7 +275,10 @@ def test_instagram_profile(profile_data, username,profile):
   
 
     print(f"Followers: {followers}, Follows: {follows}, Blue Tick: {blue_tick}")
+    if blue_tick == 1 and followers > 50000:
+        return "Real Profile(Verified Profile with High Followers)"
     if blue_tick == 1:
+        
     # Case where the profile has a blue tick and a reasonable following-follower ratio
         if followers > 200 and follows < 500 and (followers / follows) > 0.5:  # Example condition for verified profiles
             return "Real Profile (Verified, Balanced Following and Posts)"
