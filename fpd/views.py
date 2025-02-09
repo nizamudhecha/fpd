@@ -35,9 +35,9 @@ def load_session_from_browser(L):
     """Loads Instagram session using cookies copied from browser DevTools."""
     try:
         cookies = {
-            "csrftoken": "lvselpr9OT2t6oRELlRhZIZxOc9kjQgm",
-            "sessionid": "31970404886%3AiltRThUxSScgOj%3A29%3AAYfyH5Xd4WNOjl-CJ-eESftVyu1abcgh2g8koxPmYQ",
-            "ds_user_id": "31970404886",
+            "csrftoken": "ASOx9jSTX9L0Y1Fn1ubIBiw8V0Sxle4y",
+            "sessionid": "31970404886%3ABNphQuCxHZXuwz%3A9%3AAYei3geNlZ0aWT0ONxdZIHuCVTkxJPgHXE23WiDU_A",
+            "ds_user_id": "31970404886,
             "mid": "Z5-y_wALAAHPivroNn0A5pweZaQz",
             "ig_did": "DFDF27AA-E40F-43B5-8FB6-7246820E0D21"
         }
